@@ -56,3 +56,15 @@ class Crossover:
                 child_1[i], child_2[i] = child_2[i], child_1[i]
         return child_1, child_2
 
+    def discrete_crossover(self, chromosome_1, chromosome_2, grains=2):
+        if random.random() < self.crossover_prob:
+            child_1, child_2 = np.copy(chromosome_1), np.copy(chromosome_2)
+            points = sorted(random.sample(range(1, len(chromosome_1) - 1), grains * 2))
+
+            for i in range(0, len(points), 2):
+                start, end = points[i], points[i + 1]
+                child_1[start:end], child_2[start:end] = child_2[start:end], child_1[start:end]
+            return child_1, child_2
+        return chromosome_1, chromosome_2
+
+    #117 - samokrzyżowanie, 153 - bisekcji,
