@@ -3,8 +3,9 @@ import random
 
 
 class Crossover:
-    def __init__(self, crossover_prob=0.9):
+    def __init__(self, crossover_prob=0.9, swap_prob=0.5):
         self.crossover_prob = crossover_prob
+        self.swap_prob = swap_prob
 
     def single_point_crossover(self, chromosome_1, chromosome_2):
         if random.random() < self.crossover_prob:
@@ -50,21 +51,45 @@ class Crossover:
         return chromosome_1, chromosome_2
 
     def uniform_crossover(self, chromosome_1, chromosome_2):
-        child_1, child_2 = np.copy(chromosome_1), np.copy(chromosome_2)
-        for i in range(len(chromosome_1)):
-            if random.random() < self.crossover_prob:
-                child_1[i], child_2[i] = child_2[i], child_1[i]
-        return child_1, child_2
-
-    def discrete_crossover(self, chromosome_1, chromosome_2, grains=2):
         if random.random() < self.crossover_prob:
             child_1, child_2 = np.copy(chromosome_1), np.copy(chromosome_2)
-            points = sorted(random.sample(range(1, len(chromosome_1) - 1), grains * 2))
+            mask = [0] * len(chromosome_1)
 
-            for i in range(0, len(points), 2):
-                start, end = points[i], points[i + 1]
-                child_1[start:end], child_2[start:end] = child_2[start:end], child_1[start:end]
+            for i in range(len(chromosome_1)):
+                if random.uniform(0, 1) < self.swap_prob:
+                    mask[i] = 1
+
+            for i in range(len(chromosome_1)):
+                if mask[i] == 1:
+                    child_1[i] = chromosome_1[i]
+                    child_2[i] = chromosome_2[i]
+                else:
+                    child_1[i] = chromosome_2[i]
+                    child_2[i] = chromosome_1[i]
+
             return child_1, child_2
         return chromosome_1, chromosome_2
 
-    #117 - samokrzyżowanie, 153 - bisekcji,
+    # discrete returns only 1 child!!
+    def discrete_crossover(self, chromosome_1, chromosome_2):
+        if random.random() < self.crossover_prob:
+            child_1 = np.copy(chromosome_1)
+
+            for i in range(len(chromosome_1)):
+                if random.uniform(0, 1) < self.swap_prob:
+                    child_1[i] = chromosome_1[i]
+                else:
+                    child_1[i] = chromosome_2[i]
+
+            return child_1
+        return chromosome_1
+
+    def elite_crossover(self, chromosome_1, chromosome_2):
+        if random.random() < self.crossover_prob:
+            child_1, child_2 = self.single_point_crossover(chromosome_1, chromosome_2)
+            ratings = [sum(chromosome) for chromosome in [chromosome_1, chromosome_2, child_1, child_2]]
+            elite_index = np.argsort(ratings)[-2:]
+            new_population = [chromosome_1, chromosome_2, child_1, child_2][elite_index[0]], [chromosome_1, chromosome_2, child_1, child_2][elite_index[1]]
+            return new_population
+        return chromosome_1, chromosome_2
+
