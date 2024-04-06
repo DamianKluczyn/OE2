@@ -104,6 +104,29 @@ class Crossover:
             return child_1
         return chromosome_1
 
+    def binary_crossover(self, chromosome_1, chromosome_2):
+        if random.random() < self.crossover_prob:
+            left, right = 0, len(chromosome_1)-1
+
+            while left < right - 2:
+                center = (left + right) // 2
+
+                TP_1 = np.concatenate((chromosome_1[:center], chromosome_2[center:]))
+                TP_2 = np.concatenate((chromosome_2[:center], chromosome_1[center:]))
+
+                NTP_1 = np.sum(TP_1)
+                NTP_2 = np.sum(TP_2)
+
+                if NTP_1 > NTP_2:
+                    left = center
+                else:
+                    right = center
+
+            child_1 = np.concatenate((chromosome_1[:right], chromosome_2[right:]))
+            child_2 = np.concatenate((chromosome_2[:right], chromosome_1[right:]))
+
+            return child_1, child_2
+        return chromosome_1, chromosome_2
 
 
 
