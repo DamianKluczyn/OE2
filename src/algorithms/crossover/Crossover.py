@@ -14,3 +14,11 @@ class Crossover:
             return child_1, child_2
         return chromosome_1, chromosome_2
 
+    def two_point_crossover(self, chromosome_1, chromosome_2):
+        if random.random() < self.crossover_prob:
+            point_1 = random.randint(1, len(chromosome_1) - 3)
+            point_2 = random.randint(point_1 + 1, len(chromosome_1) - 2)
+            child_1 = np.concatenate((chromosome_1[:point_1], chromosome_2[point_1:point_2], chromosome_1[point_2:]))
+            child_2 = np.concatenate((chromosome_2[:point_1], chromosome_1[point_1:point_2], chromosome_2[point_2:]))
+            return child_1, child_2
+        return chromosome_1, chromosome_2
