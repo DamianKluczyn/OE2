@@ -48,3 +48,11 @@ class Crossover:
                 chromosome_1[points[2]:]))
             return child_1, child_2
         return chromosome_1, chromosome_2
+
+    def uniform_crossover(self, chromosome_1, chromosome_2):
+        child_1, child_2 = np.copy(chromosome_1), np.copy(chromosome_2)
+        for i in range(len(chromosome_1)):
+            if random.random() < self.crossover_prob:
+                child_1[i], child_2[i] = child_2[i], child_1[i]
+        return child_1, child_2
+
