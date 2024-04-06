@@ -70,7 +70,7 @@ class Crossover:
             return child_1, child_2
         return chromosome_1, chromosome_2
 
-    # discrete returns only 1 child!!
+    # Returns only 1 child!
     def discrete_crossover(self, chromosome_1, chromosome_2):
         if random.random() < self.crossover_prob:
             child_1 = np.copy(chromosome_1)
@@ -92,4 +92,18 @@ class Crossover:
             new_population = [chromosome_1, chromosome_2, child_1, child_2][elite_index[0]], [chromosome_1, chromosome_2, child_1, child_2][elite_index[1]]
             return new_population
         return chromosome_1, chromosome_2
+
+    # Returns only 1 child!
+    def self_crossover(self, chromosome_1):
+        if random.random() < self.crossover_prob:
+            child_1 = np.zeros_like(chromosome_1)
+            ones_counter = chromosome_1.count(1)
+            ones_index = random.sample(range(len(chromosome_1)), ones_counter)
+            for index in ones_index:
+                child_1[index] = 1
+            return child_1
+        return chromosome_1
+
+
+
 
