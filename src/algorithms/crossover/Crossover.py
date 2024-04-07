@@ -82,7 +82,7 @@ class Crossover:
                     child_1[i] = chromosome_2[i]
 
             return child_1
-        return chromosome_1
+        return chromosome_1 if random.random() < self.swap_prob else chromosome_2
 
     def elite_crossover(self, chromosome_1, chromosome_2):
         if random.random() < self.crossover_prob:
@@ -128,5 +128,18 @@ class Crossover:
             return child_1, child_2
         return chromosome_1, chromosome_2
 
+    # Returns only 1 child!
+    def linkage_evolution_crossover(self, chromosome_1, chromosome_2):
+        if random.random() < self.crossover_prob:
+            child = []
+            segments = random.randint(1, 3) #dostosować
 
+            for _ in range(segments):
+                parent = chromosome_1 if random.random() < self.swap_prob else chromosome_2
+                segment_start = random.randint(0, len(chromosome_1) - 1)
+                segment_end = random.randint(segment_start + 1, len(chromosome_1))
+                child.append(parent[segment_start:segment_end])
 
+            child = child[:len(chromosome_1)]
+            return np.array(child)
+        return chromosome_1 if random.random() < self.swap_prob else chromosome_2
