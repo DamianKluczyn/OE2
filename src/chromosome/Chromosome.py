@@ -3,33 +3,27 @@ from typing import Tuple, List
 from math import log2, ceil
 
 
-def binary_list_to_decimal(binary_list: List) -> int:
-    """
-    Converts a binary list to a decimal
-    :param binary_list: The binary list to convert
-    :return: The decimal value of the binary list
-    """
-    return sum(value * (2 ** index) for index, value in enumerate(reversed(binary_list)))
+class Chromosome:
+    def __init__(self, boundaries: Tuple[float, float], accuracy: int):
+        self.boundaries = boundaries
+        self.accuracy = accuracy
+        self.chromosome_length = ceil(log2((boundaries[1] - boundaries[0]) * 10 ** accuracy))
+        self.chromosome = np.random.choice([0, 1], size=self.chromosome_length, p=[0.5, 0.5])
 
+    def return_boundaries(self):
+        return self.boundaries
 
-def generate_binary_chromosome(boundries: Tuple[int, int], accuracy: int) -> List:
-    """
-    Generates a binary chromosome with the given boundries and accuracy
-    :param boundries: the boundries of the solution
-    :param accuracy: the accuracy of the solution
-    :return: the binary chromosome
-    """
-    chromosome_length = ceil(log2((boundries[1] - boundries[0]) * 10 ** accuracy))
+    def return_accuracy(self):
+        return self.accuracy
 
-    return np.random.choice([0, 1], size=chromosome_length, p=[0.5, 0.5])
+    def return_chromosome_length(self):
+        return self.chromosome_length
 
+    def return_chromosome(self):
+        return self.chromosome
 
-def decode_binary_chromosome(boundries: Tuple[int, int], binary_chain: List) -> float:
-    """
-    Decodes the given binary chromosome to a float value
-    :param boundries: the boundries of the solution
-    :param binary_chain: the binary chain of the chromosome
-    :return: the float value of the chromosome
-    """
-    return (boundries[0] + binary_list_to_decimal(binary_chain) *
-            (boundries[1] - boundries[0]) / (2 ** len(binary_chain) - 1))
+    def decode_binary_chromosome(self):
+        decimal = sum(value * (2 ** index) for index, value in enumerate(reversed(self.chromosome)))
+        return (self.boundaries[0] + decimal *
+                (self.boundaries[1] - self.boundaries[0]) / (2 ** self.chromosome_length - 1))
+
