@@ -2,7 +2,6 @@ import numpy as np
 from typing import Tuple, List
 from math import log2, ceil
 
-#TODO klasa chromosom
 
 class Chromosome:
     def __init__(self, boundaries: Tuple[float, float], accuracy: int):
