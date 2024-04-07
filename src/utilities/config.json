@@ -1,0 +1,21 @@
+{
+  "algorithm_parameters": {
+    "number_of_variables": 10,
+    "binary_precision": 16,
+    "population_size": 100,
+    "number_of_epochs": 50,
+    "selection_method": "tournament",
+    "selection_parameters": {
+      "tournament_size": 5
+    },
+    "crossover_probability": 0.9,
+    "crossover_type": "single_point_crossover",
+    "mutation_probability": 0.1,
+    "inversion_probability": 0.1,
+    "elite_strategy": {
+      "use_elite_strategy": true,
+      "elite_percentage": 0.1,
+      "elite_count": null
+    }
+  }
+}
