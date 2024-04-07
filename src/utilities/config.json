@@ -14,7 +14,7 @@
     "inversion_probability": 0.1,
     "elite_strategy": {
       "use_elite_strategy": true,
-      "elite_percentage": 0.1,
+      "elite_percentage": 10,
       "elite_count": null
     }
   }
