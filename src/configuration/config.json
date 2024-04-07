@@ -1,5 +1,7 @@
 {
   "algorithm_parameters": {
+    "start_range_a": 0,
+    "end_range_b": 100,
     "number_of_variables": 10,
     "binary_precision": 16,
     "population_size": 100,

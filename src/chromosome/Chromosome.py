@@ -2,6 +2,7 @@ import numpy as np
 from typing import Tuple, List
 from math import log2, ceil
 
+#TODO klasa chromosom
 
 def binary_list_to_decimal(binary_list: List) -> int:
     """

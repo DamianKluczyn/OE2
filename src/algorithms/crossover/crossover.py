@@ -7,6 +7,9 @@ class Crossover:
         self.crossover_prob = crossover_prob
         self.swap_prob = swap_prob
 
+    def fitness_function(self):
+        pass
+
     def single_point_crossover(self, chromosome_1, chromosome_2):
         if random.random() < self.crossover_prob:
             point = random.randint(1, len(chromosome_1) - 2)
