@@ -39,6 +39,6 @@ class Mutation:
 # Przykładowe wywołanie
 # mutation_rate = 0.1
 # mutation = Mutation(mutation_rate)
-# chromosome = [0, 1, 0, 1, 1, 0, 1, 0, 1, 0]
-# mutated_boundary = mutation.boundary_mutation(chromosome)
+# population = [0, 1, 0, 1, 1, 0, 1, 0, 1, 0]
+# mutated_boundary = mutation.boundary_mutation(population)
 

@@ -2,7 +2,7 @@ import json
 
 
 class Config:
-    def __init__(self, config_path='src/utilities/config.json'):
+    def __init__(self, config_path='src/configuration/config.json'):
         self.config_path = config_path
         self.config = self.load_config()
 
