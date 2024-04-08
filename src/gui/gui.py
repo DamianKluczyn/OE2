@@ -2,9 +2,11 @@ import tkinter.messagebox
 from tkinter import *
 from tkinter import ttk
 import re
+from configuration import config
 
 from IPython.terminal.pt_inputhooks import tk
 
+from configuration.config import Config
 from main import main_function
 
 
@@ -63,7 +65,7 @@ class GUIClass(Tk):
         self.best_chromosome_entry.grid(column=1, row=5, sticky="N E", padx=5, pady=5)
 
         ttk.Label(mainframe, text="Elite Strategy amount:").grid(column=0, row=6, sticky=W)
-        self.elite_strategy = DoubleVar()
+        self.elite_strategy = IntVar()
         self.elite_strategy_entry = ttk.Entry(mainframe, width=15, textvariable=self.elite_strategy,
                                               validate="focusout", validatecommand=vcmd, invalidcommand=ivcmd)
         self.elite_strategy_entry.grid(column=1, row=6, sticky="N E", padx=5, pady=5)
@@ -96,7 +98,7 @@ class GUIClass(Tk):
         self.crossover_method = StringVar()
         self.crossover_prob_combo = ttk.Combobox(mainframe, textvariable=self.crossover_method)
         self.crossover_prob_combo['values'] = ("Single Point", "Two Point", "Three Point", "Uniform", "Discrete",
-                                               "Elite", "Self", "Binary", "Linkage Evolution")
+                                               "Self", "Binary", "Linkage Evolution")
         self.crossover_prob_combo.grid(column=0, row=14, sticky="N W", padx=5, pady=5)
 
         ttk.Label(mainframe, text="Mutation method:").grid(column=0, row=15, sticky=W)
@@ -105,9 +107,13 @@ class GUIClass(Tk):
         self.mutation_method_combo['values'] = ("Boundary", "One Point", "Two Point")
         self.mutation_method_combo.grid(column=0, row=16, sticky="N W", padx=5, pady=5)
 
+        self.use_elite_strategy_var = BooleanVar()
+        self.use_elite_strategy_checkbutton = ttk.Checkbutton(mainframe, text="Elite Strategy", variable=self.use_elite_strategy_var)
+        self.use_elite_strategy_checkbutton.grid(column=0, row=17, sticky=W, padx=5, pady=5)
+
         self.maximization = BooleanVar()
         self.maximization_check = ttk.Checkbutton(mainframe, text="Maximization", variable=self.maximization)
-        self.maximization_check.grid(column=0, row=17, sticky=W, padx=5, pady=5)
+        self.maximization_check.grid(column=0, row=18, sticky=W, padx=5, pady=5)
 
         self.start_button = ttk.Button(mainframe, text="Start", padding="10 10 10 10", command=self.get_values)
         self.start_button.grid(row=18, padx=5, pady=5, sticky="N E S W")
@@ -116,8 +122,8 @@ class GUIClass(Tk):
         self.error_message.grid(row=19, padx=5, pady=5, sticky="N E S W")
 
     def validate_entry_data(self, value):
-        patern = r'[+]?([0-9]*[.])?[0-9]+'
-        if re.fullmatch(patern, value) is None:
+        pattern = r'[+]?([0-9]*[.])?[0-9]+'
+        if re.fullmatch(pattern, value) is None:
             return False
 
         return True
@@ -129,7 +135,18 @@ class GUIClass(Tk):
         self.error_message['text'] = error
 
     def get_values(self):
-        # Dodaj nadpisywanie config
+        config = Config()
+        config.set_param('algorithm_parameters.start_range_a', self.begin_range_a.get())
+        config.set_param('algorithm_parameters.end_range_b', self.end_range_b.get())
+        config.set_param('algorithm_parameters.population_size', self.pop_size.get())
+        config.set_param('algorithm_parameters.binary_precision', self.precision_bits.get())
+        config.set_param('algorithm_parameters.number_of_epochs', self.epochs.get())
+        config.set_param('algorithm_parameters.selection_method', self.selection_method.get().lower().replace(" ", "_"))
+        config.set_param('algorithm_parameters.crossover_probability', self.crossover_prob.get())
+        config.set_param('algorithm_parameters.mutation_probability', self.mutation_prob.get())
+        config.set_param('algorithm_parameters.inversion_probability', self.inversion_prob.get())
+        config.set_param('algorithm_parameters.elite_strategy.use_elite_strategy', self.use_elite_strategy_var.get())
+        config.set_param('algorithm_parameters.elite_strategy.elite_count', self.elite_strategy.get())
 
         exec_time = main_function()
         self.info_box = tkinter.messagebox.showinfo(title='Obliczenia ewolucyjne - Projekt 2',

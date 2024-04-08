@@ -11,8 +11,6 @@ from src.population.population import Population
 import time
 
 
-# TODO klasa populacja, klasa osobnik, klasa fitness function
-
 def main_function():
     start_time = time.time()
     time.sleep(5)
