@@ -1,22 +1,24 @@
 {
-  "algorithm_parameters": {
-    "start_range_a": -10,
-    "end_range_b": 10,
-    "number_of_variables": 10,
-    "binary_precision": 6,
-    "population_size": 20,
-    "number_of_epochs": 50,
-    "selection_method": "tournament",
-    "selection_parameters": {
-      "tournament_size": 5
-    },
-    "crossover_probability": 0.9,
-    "crossover_type": "single_point_crossover",
-    "mutation_probability": 0.1,
-    "inversion_probability": 0.1,
-    "elite_strategy": {
-      "use_elite_strategy": true,
-      "elite_count": 2
+    "algorithm_parameters": {
+        "start_range_a": -10.0,
+        "end_range_b": 10.0,
+        "population_size": 50,
+        "binary_precision": 6,
+        "number_of_epochs": 20,
+        "number_of_variables": 10,
+        "selection_parameters": {
+            "tournament_size": 2
+        },
+        "elite_strategy": {
+            "use_elite_strategy": true,
+            "elite_count": 2
+        },
+        "crossover_probability": 0.9,
+        "mutation_probability": 0.1,
+        "inversion_probability": 0.1,
+        "selection_method": "select_best",
+        "crossover_method": "Two Point",
+        "mutation_method": "boundary",
+        "maximization": true
     }
-  }
 }
