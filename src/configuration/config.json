@@ -4,7 +4,7 @@
     "end_range_b": 10,
     "number_of_variables": 10,
     "binary_precision": 6,
-    "population_size": 100,
+    "population_size": 20,
     "number_of_epochs": 50,
     "selection_method": "tournament",
     "selection_parameters": {
