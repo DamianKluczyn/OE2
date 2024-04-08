@@ -1,6 +1,11 @@
+import tkinter.messagebox
 from tkinter import *
 from tkinter import ttk
 import re
+
+from IPython.terminal.pt_inputhooks import tk
+
+from main import main_function
 
 
 class GUIClass(Tk):
@@ -124,7 +129,11 @@ class GUIClass(Tk):
         self.error_message['text'] = error
 
     def get_values(self):
-        pass
+        # Dodaj nadpisywanie config
+
+        exec_time = main_function()
+        self.info_box = tkinter.messagebox.showinfo(title='Obliczenia ewolucyjne - Projekt 2',
+                                                    message=f'Execution time: {round(exec_time, 4)}s')
 
 
 if __name__ == "__main__":
