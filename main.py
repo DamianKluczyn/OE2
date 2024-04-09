@@ -1,13 +1,13 @@
-from algorithms.crossover import crossover
-from algorithms.mutation import mutation
-from algorithms.selection import selection
-from configuration import config
-from utilities import generating_files
-from optimization import optimization
-from population import chromosome
+from src.algorithms.crossover import crossover
+from src.algorithms.mutation import mutation
+from src.algorithms.selection import selection
+from src.configuration import config
+from src.utilities import generating_files
+from src.optimization import optimization
+from src.population import chromosome
 from src.configuration.config import Config
 from src.population.population import Population
-from gui import gui
+from src.gui import gui
 
 import time
 
