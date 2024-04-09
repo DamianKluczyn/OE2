@@ -1,11 +1,12 @@
 from tkinter import *
 from tkinter import ttk
 import re
+
+from main import main_function
 from src.configuration.config import Config
 from IPython.terminal.pt_inputhooks import tk
 
 
-#import config
 #import main_function
 
 
@@ -147,7 +148,6 @@ class GUIClass(Tk):
         self.error_message['text'] = error
 
     def get_values(self):
-        pass
         config = Config()
         config.set_param('algorithm_parameters.start_range_a', self.begin_range_a.get())
         config.set_param('algorithm_parameters.end_range_b', self.end_range_b.get())
@@ -171,6 +171,6 @@ class GUIClass(Tk):
         #                                             message=f'Execution time: {round(exec_time, 4)}s')
 
 
-#if __name__ == "__main__":
-     #app = GUIClass()
-     #app.mainloop()
+if __name__ == "__main__":
+     app = GUIClass()
+     app.mainloop()
