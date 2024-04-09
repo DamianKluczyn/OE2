@@ -1,25 +1,25 @@
 {
     "algorithm_parameters": {
-        "start_range_a": 1.0,
+        "start_range_a": -10.0,
         "end_range_b": 10.0,
         "population_size": 20,
         "binary_precision": 2,
-        "number_of_epochs": 200,
+        "number_of_epochs": 2,
         "number_of_variables": 2,
         "selection_parameters": {
-            "tournament_size": 2
+            "tournament_size": 10
         },
         "elite_strategy": {
-            "use_elite_strategy": false,
+            "use_elite_strategy": true,
             "elite_count": 2
         },
-        "crossover_probability": 0.1,
-        "mutation_probability": 0.1,
-        "inversion_probability": 0.1,
+        "crossover_probability": 1.0,
+        "mutation_probability": 1.0,
+        "inversion_probability": 1.0,
         "selection_method": "roulette_wheel",
         "crossover_method": "Single Point",
         "mutation_method": "boundary",
-        "maximization": false,
+        "maximization": true,
         "fitness_function": "Bent Cigar"
     }
 }

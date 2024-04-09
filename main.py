@@ -1,12 +1,7 @@
-from src.algorithms.crossover import crossover
-from src.algorithms.mutation import mutation
-from src.algorithms.selection import selection
-from src.configuration import config
-from src.utilities import generating_files
-from src.optimization import optimization
-from src.population import chromosome
+from src.algorithms.selection.selection import GeneticSelection
 from src.configuration.config import Config
 from src.population.population import Population
+from src.algorithms.selection.elite import Elite
 #from src.gui import gui
 
 import time
@@ -22,22 +17,29 @@ def main_function():
     number_of_variables = config.get_param('algorithm_parameters.number_of_variables', 10)
     number_of_epochs = config.get_param('algorithm_parameters.number_of_epochs', 50)
     fitness_function = config.get_param('algorithm_parameters.fitness_function', 'Bent Cigar')
+    selection_method = config.get_param('algorithm_parameters.selection_method')
+    selection_count = config.get_param('algorithm_parameters.selection_parameters.tournament_size')
+    maximum = config.get_param('algorithm_parameters.maximization')
+    use_elite = config.get_param('algorithm_parameters.elite_strategy.use_elite_strategy')
+    elite_count = config.get_param('algorithm_parameters.elite_strategy.elite_count')
+
 
     population = Population(population_size, number_of_variables, (start_range, end_range), binary_precision, fitness_function)
-
-    print(f"Initial population: {population}")
 
     start_time = time.time()
 
     for epoch in range(number_of_epochs):
-        # poczatkowa pop = 20
-        # selection = GeneticSelection(...) # dostaje populacje zwraca liste osobnikow wybranych (tournament_size)
 
-        # elite = Elite(...) # przyjmuje populacje z selection, zwraca x osobnikow odrazu do nowej populacji
+        selection = GeneticSelection(population.get_population(), selection_type=selection_method, tournament_size=selection_count, max=maximum)
+        selected_population = selection.get_best_chromosomes()
 
-        # new_population = populacja z selection - indeksy elit (liczba osobikow: np. 10 - 2 osobniki)
+        if use_elite:
+            elites = Elite(selected_population, elite_count, maximum)
 
-        # 8
+            for elite in elites.select_elite():
+                selected_population.remove(elite)
+
+
         # for i in range(len(population))/2
         #
         # crossover = Crossover(...) # przyjmuje 2 osobniki return dwa osobniki nowe //losowe osobniki
@@ -63,23 +65,3 @@ def main_function():
     end_time = time.time()
     exec_time = end_time - start_time
     print(f"Algorithm finished in {exec_time} seconds.")
-
-
-#if __name__ == '__main__':
-    # config = Config()
-    # population = Population(3, 3, (-10, 10), 6)
-    # print(population)
-
-    #app = gui.GUIClass()
-    #app.mainloop()
-
-"""
-Populacja na wiele osbonikow
-Osobnik ma wiele chromosomow i ich fitness function dwie tablice: 1. binarna, 2. fitness(x,y)
-x - zdekodowany binarny chromosom
-y - wartosc fitness
-
-Selekcja przyjmuje populacje
-iteruje po osobnikach wybierając osobnika z najlepszym min/max
-
-"""

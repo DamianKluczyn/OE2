@@ -98,7 +98,7 @@ class GUIClass(Tk):
         ttk.Label(mainframe, text="Selection method:").grid(column=0, row=11, sticky=W)
         self.selection_method = StringVar()
         self.selection_method_combo = ttk.Combobox(mainframe, textvariable=self.selection_method)
-        self.selection_method_combo['values'] = ("Roulette Wheel", "Tournament", "Select best")
+        self.selection_method_combo['values'] = ("Roulette Wheel", "Tournament", "Best")
         self.selection_method_combo.grid(column=1, row=11, sticky="N W", padx=5, pady=5)
 
         ttk.Label(mainframe, text="Crossover method:").grid(column=0, row=12, sticky=W)

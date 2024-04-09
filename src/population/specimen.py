@@ -1,6 +1,6 @@
 from .chromosome import Chromosome
 from typing import Tuple, List
-from src.optimization import optimization
+from src.optimization.optimization import Optimization
 
 
 class Specimen:
@@ -24,10 +24,11 @@ class Specimen:
         return self.fitness
 
     def calculate_fitness(self):
+        optimization = Optimization()
         if self.fitness_function == "Bent Cigar":
-            self.fitness = optimization.Optimization.bent_cigar_function(self.get_decoded_specimen())
+            self.fitness = optimization.bent_cigar_function(self.get_decoded_specimen())
         elif self.fitness_function == "Hypersphere":
-            self.fitness = optimization.Optimization.hypersphere(self.get_decoded_specimen())
+            self.fitness = optimization.hypersphere(self.get_decoded_specimen())
 
     def __str__(self) -> str:
         result = 'Specimen:\n'
