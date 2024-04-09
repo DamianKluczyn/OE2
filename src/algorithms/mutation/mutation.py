@@ -5,40 +5,35 @@ class Mutation:
     def __init__(self, mutation_rate):
         self.mutation_rate = mutation_rate
 
-    def boundary_mutation(self, chromosome):
-        mutated_chromosome = chromosome[:]
+    def boundary_mutation(self, specimen):
+        mutated_specimen = specimen.copy()
 
-        for i in range(len(chromosome)):
+        for chromosome_index, chromosome in enumerate(mutated_specimen):
+            for gene_index, gene in enumerate(chromosome):
+                if random.random() < self.mutation_rate:
+                    mutated_specimen[chromosome_index][gene_index] = 1 - gene
+
+        return mutated_specimen
+
+    def one_point_mutation(self, specimen):
+        mutated_specimen = specimen.copy()
+
+        for chromosome_index, chromosome in enumerate(mutated_specimen):
             if random.random() < self.mutation_rate:
-                mutated_chromosome[i] = 1 - chromosome[i]
+                point = random.randint(0, len(chromosome) - 1)
+                mutated_specimen[chromosome_index][point] = 1 - chromosome[point]
 
-        return mutated_chromosome
+        return mutated_specimen
 
-    def one_point_mutation(self, chromosome):
-        mutated_chromosome = chromosome[:]
+    def two_point_mutation(self, specimen):
+        mutated_specimen = specimen.copy()
 
-        if random.random() < self.mutation_rate:
-            point = random.randint(0, len(chromosome) - 1)
-            mutated_chromosome[point] = 1 - chromosome[point]
+        for chromosome_index, chromosome in enumerate(mutated_specimen):
+            if random.random() < self.mutation_rate:
+                points = random.sample(range(len(chromosome)), 2)
+                points.sort()
 
-        return mutated_chromosome
+                for i in range(points[0], points[1]+1):
+                    mutated_specimen[chromosome_index][i] = 1 - chromosome[i]
 
-    def two_point_mutation(self, chromosome):
-        mutated_chromosome = chromosome[:]
-
-        if random.random() < self.mutation_rate:
-            points = random.sample(range(len(chromosome)), 2)
-            points.sort()
-
-            for i in range(points[0], points[1]+1):
-                mutated_chromosome[i] = 1 - chromosome[i]
-
-        return mutated_chromosome
-
-
-# Przykładowe wywołanie
-# mutation_rate = 0.1
-# mutation = Mutation(mutation_rate)
-# population = [0, 1, 0, 1, 1, 0, 1, 0, 1, 0]
-# mutated_boundary = mutation.boundary_mutation(population)
-
+        return mutated_specimen

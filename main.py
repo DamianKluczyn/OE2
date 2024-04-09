@@ -21,9 +21,10 @@ def main_function():
     binary_precision = config.get_param('algorithm_parameters.binary_precision', 6)
     number_of_variables = config.get_param('algorithm_parameters.number_of_variables', 10)
     number_of_epochs = config.get_param('algorithm_parameters.number_of_epochs', 50)
+    fitness_function = config.get_param('algorithm_parameters.fitness_function', 'Bent Cigar Function')
 
-    population = Population(population_size, number_of_variables, (start_range, end_range), binary_precision)
-    # fitness function poczatkowe + zapis do pliku nr. 0 epoki
+    population = Population(population_size, number_of_variables, (start_range, end_range), binary_precision, fitness_function)
+
     print(f"Initial population: {population}")
 
     start_time = time.time()

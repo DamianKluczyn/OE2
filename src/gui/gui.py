@@ -2,7 +2,7 @@ import tkinter.messagebox
 from tkinter import *
 from tkinter import ttk
 import re
-from configuration.config import Config
+from src.configuration.config import Config
 from IPython.terminal.pt_inputhooks import tk
 
 from main import main_function
