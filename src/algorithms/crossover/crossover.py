@@ -39,82 +39,153 @@ class Crossover:
 
         return child1, child2
 
-    def two_point_crossover(self, chromosome_1, chromosome_2):
-        if random.random() < self.crossover_prob:
-            point_1 = random.randint(1, len(chromosome_1) - 3)
-            point_2 = random.randint(point_1 + 1, len(chromosome_1) - 2)
-            child_1 = np.concatenate((
-                chromosome_1[:point_1],
-                chromosome_2[point_1:point_2],
-                chromosome_1[point_2:]))
-            child_2 = np.concatenate((
-                chromosome_2[:point_1],
-                chromosome_1[point_1:point_2],
-                chromosome_2[point_2:]))
-            return child_1, child_2
-        return chromosome_1, chromosome_2
+    def two_point_crossover(self, specimen1, specimen2):
+        child1_chromosomes = []
+        child2_chromosomes = []
 
-    def three_point_crossover(self, chromosome_1, chromosome_2):
-        if random.random() < self.crossover_prob:
-            points = sorted(random.sample(range(1, len(chromosome_1) - 1), 3))
-            child_1 = np.concatenate((
-                chromosome_1[:points[0]],
-                chromosome_2[points[0]:points[1]],
-                chromosome_1[points[1]:points[2]],
-                chromosome_2[points[2]:]))
-            child_2 = np.concatenate((
-                chromosome_2[:points[0]],
-                chromosome_1[points[0]:points[1]],
-                chromosome_2[points[1]:points[2]],
-                chromosome_1[points[2]:]))
-            return child_1, child_2
-        return chromosome_1, chromosome_2
+        for i in range(len(specimen1.specimen)):
+            parent1_chromosome = specimen1.specimen[i].chromosome
+            parent2_chromosome = specimen2.specimen[i].chromosome
 
-    def uniform_crossover(self, chromosome_1, chromosome_2):
-        if random.random() < self.crossover_prob:
-            child_1, child_2 = np.copy(chromosome_1), np.copy(chromosome_2)
-            mask = [0] * len(chromosome_1)
+            if random.random() < self.crossover_prob:
+                point_1 = random.randint(1, len(parent1_chromosome) - 3)
+                point_2 = random.randint(point_1 + 1, len(parent1_chromosome) - 2)
+
+                child1_chromosome = np.concatenate((
+                    parent1_chromosome[:point_1],
+                    parent2_chromosome[point_1:point_2],
+                    parent1_chromosome[point_2:]))
+                child2_chromosome = np.concatenate((
+                    parent2_chromosome[:point_1],
+                    parent1_chromosome[point_1:point_2],
+                    parent2_chromosome[point_2:]))
+
+            else:
+                child1_chromosome = parent1_chromosome
+                child2_chromosome = parent2_chromosome
+
+            child1_chromosomes.append(child1_chromosome)
+            child2_chromosomes.append(child2_chromosome)
+
+        child1 = Specimen.from_chromosomes(child1_chromosomes, specimen1.boundaries, specimen1.accuracy,
+                                           specimen1.fitness_function)
+        child2 = Specimen.from_chromosomes(child2_chromosomes, specimen2.boundaries, specimen2.accuracy,
+                                           specimen2.fitness_function)
+
+        return child1, child2
+
+    def three_point_crossover(self, specimen1, specimen2):
+        child1_chromosomes = []
+        child2_chromosomes = []
+
+        for i in range(len(specimen1.specimen)):
+            parent1_chromosome = specimen1.specimen[i].chromosome
+            parent2_chromosome = specimen2.specimen[i].chromosome
+
+            if random.random() < self.crossover_prob:
+                points = sorted(random.sample(range(1, len(parent1_chromosome) - 1), 3))
+                child1_chromosome = np.concatenate((
+                    parent1_chromosome[:points[0]],
+                    parent2_chromosome[points[0]:points[1]],
+                    parent1_chromosome[points[1]:points[2]],
+                    parent2_chromosome[points[2]:]))
+                child2_chromosome = np.concatenate((
+                    parent2_chromosome[:points[0]],
+                    parent1_chromosome[points[0]:points[1]],
+                    parent2_chromosome[points[1]:points[2]],
+                    parent1_chromosome[points[2]:]))
+            else:
+                child1_chromosome = parent1_chromosome
+                child2_chromosome = parent2_chromosome
+
+            child1_chromosomes.append(child1_chromosome)
+            child2_chromosomes.append(child2_chromosome)
+
+        child1 = Specimen.from_chromosomes(child1_chromosomes, specimen1.boundaries, specimen1.accuracy,
+                                           specimen1.fitness_function)
+        child2 = Specimen.from_chromosomes(child2_chromosomes, specimen2.boundaries, specimen2.accuracy,
+                                           specimen2.fitness_function)
+
+        return child1, child2
+
+    def uniform_crossover(self, specimen1, specimen2):
+        child1_chromosomes = []
+        child2_chromosomes = []
+
+        for i in range(len(specimen1.specimen)):
+            parent1_chromosome = specimen1.specimen[i].chromosome
+            parent2_chromosome = specimen2.specimen[i].chromosome
+
+            if random.random() < self.crossover_prob:
+                child1_chromosome, child2_chromosome = np.copy(parent1_chromosome), np.copy(parent2_chromosome)
+
+                for i in range(len(parent1_chromosome)):
+                    if random.uniform(0, 1) < self.swap_prob:
+                        child1_chromosome[i] = parent1_chromosome[i]
+                        child2_chromosome[i] = parent2_chromosome[i]
+                    else:
+                        child1_chromosome[i] = parent2_chromosome[i]
+                        child2_chromosome[i] = parent1_chromosome[i]
+
+                child1_chromosomes.append(child1_chromosome)
+                child2_chromosomes.append(child2_chromosome)
+
+            else:
+                child1_chromosomes.append(parent1_chromosome)
+                child2_chromosomes.append(parent2_chromosome)
+
+        child1 = Specimen.from_chromosomes(child1_chromosomes, specimen1.boundaries, specimen1.accuracy,
+                                           specimen1.fitness_function)
+        child2 = Specimen.from_chromosomes(child2_chromosomes, specimen2.boundaries, specimen2.accuracy,
+                                           specimen2.fitness_function)
+
+        return child1, child2
+
+    def discrete_crossover(self, specimen1, specimen2):
+        child1_chromosomes = []
+        child2_chromosomes = []
+
+        for i in range(len(specimen1.specimen)):
+            parent1_chromosome = specimen1.specimen[i].chromosome
+            parent2_chromosome = specimen2.specimen[i].chromosome
+
+            if random.random() < self.crossover_prob:
+                child1_chromosome = np.copy(parent1_chromosome)
+                child2_chromosome = np.copy(parent2_chromosome)
 
             for i in range(len(chromosome_1)):
                 if random.uniform(0, 1) < self.swap_prob:
-                    mask[i] = 1
-
-            for i in range(len(chromosome_1)):
-                if mask[i] == 1:
                     child_1[i] = chromosome_1[i]
-                    child_2[i] = chromosome_2[i]
                 else:
                     child_1[i] = chromosome_2[i]
-                    child_2[i] = chromosome_1[i]
 
-            return child_1, child_2
-        return chromosome_1, chromosome_2
-
-    # Returns only 1 child!
-    def discrete_crossover(self, chromosome_1, chromosome_2):
-        if random.random() < self.crossover_prob:
-            child_1 = np.copy(chromosome_1)
-
-            for i in range(len(chromosome_1)):
+                child1_chromosomes.append(child1_chromosome)
+                child2_chromosomes.append(child2_chromosome)
+            else:
                 if random.uniform(0, 1) < self.swap_prob:
-                    child_1[i] = chromosome_1[i]
+                    child1_chromosomes.append(parent1_chromosome)
+                    child2_chromosomes.append(parent2_chromosome)
                 else:
-                    child_1[i] = chromosome_2[i]
+                    child1_chromosomes.append(parent2_chromosome)
+                    child2_chromosomes.append(parent1_chromosome)
 
-            return child_1
-        return chromosome_1 if random.random() < self.swap_prob else chromosome_2
+        child1 = Specimen.from_chromosomes(child1_chromosomes, specimen1.boundaries, specimen1.accuracy,
+                                           specimen1.fitness_function)
+        child2 = Specimen.from_chromosomes(child2_chromosomes, specimen2.boundaries, specimen2.accuracy,
+                                           specimen2.fitness_function)
 
-    def elite_crossover(self, chromosome_1, chromosome_2):
+        return child1, child2
+
+    def elite_crossover(self, specimen1, specimen2):
         if random.random() < self.crossover_prob:
-            child_1, child_2 = self.single_point_crossover(chromosome_1, chromosome_2)
-            ratings = [sum(chromosome) for chromosome in [chromosome_1, chromosome_2, child_1, child_2]]
+            child1, child2 = self.single_point_crossover(specimen1, specimen2)
+            ratings = [specimen.fitness for specimen in [specimen1, specimen2, child1, child2]]
             elite_index = np.argsort(ratings)[-2:]
-            new_population = [chromosome_1, chromosome_2, child_1, child_2][elite_index[0]], [chromosome_1, chromosome_2, child_1, child_2][elite_index[1]]
+            new_population = [specimen1, specimen2, child1, child2][elite_index[0]], [specimen1, specimen2, child1, child2][elite_index[1]]
             return new_population
-        return chromosome_1, chromosome_2
+        return specimen1, specimen2
 
-    # Returns only 1 child!
-    def self_crossover(self, chromosome_1):
+    def self_crossover(self, specimen1, specimen2):
         if random.random() < self.crossover_prob:
             child_1 = np.zeros_like(chromosome_1)
             ones_counter = chromosome_1.count(1)
@@ -124,45 +195,86 @@ class Crossover:
             return child_1
         return chromosome_1
 
-    def binary_crossover(self, chromosome_1, chromosome_2):
+    def binary_crossover(self, specimen1, specimen2):
         if random.random() < self.crossover_prob:
-            left, right = 0, len(chromosome_1)-1
+            child1_chromosomes = []
+            child2_chromosomes = []
 
-            while left < right - 2:
-                center = (left + right) // 2
+            for i in range(len(specimen1.specimen)):
+                chromosome_1 = specimen1.specimen[i].chromosome
+                chromosome_2 = specimen2.specimen[i].chromosome
 
-                TP_1 = np.concatenate((chromosome_1[:center], chromosome_2[center:]))
-                TP_2 = np.concatenate((chromosome_2[:center], chromosome_1[center:]))
+                left, right = 0, len(chromosome_1) - 1
 
-                NTP_1 = np.sum(TP_1)
-                NTP_2 = np.sum(TP_2)
+                while left < right - 2:
+                    center = (left + right) // 2
 
-                if NTP_1 > NTP_2:
-                    left = center
-                else:
-                    right = center
+                    TP_1 = np.concatenate((chromosome_1[:center], chromosome_2[center:]))
+                    TP_2 = np.concatenate((chromosome_2[:center], chromosome_1[center:]))
 
-            child_1 = np.concatenate((chromosome_1[:right], chromosome_2[right:]))
-            child_2 = np.concatenate((chromosome_2[:right], chromosome_1[right:]))
+                    NTP_1 = np.sum(TP_1)
+                    NTP_2 = np.sum(TP_2)
 
-            return child_1, child_2
-        return chromosome_1, chromosome_2
+                    if NTP_1 > NTP_2:
+                        left = center
+                    else:
+                        right = center
 
-    # Returns only 1 child!
-    def linkage_evolution_crossover(self, chromosome_1, chromosome_2):
+                child_1 = np.concatenate((chromosome_1[:right], chromosome_2[right:]))
+                child_2 = np.concatenate((chromosome_2[:right], chromosome_1[right:]))
+
+                child1_chromosomes.append(child_1)
+                child2_chromosomes.append(child_2)
+
+            child1 = Specimen.from_chromosomes(child1_chromosomes, specimen1.boundaries, specimen1.accuracy,
+                                               specimen1.fitness_function)
+            child2 = Specimen.from_chromosomes(child2_chromosomes, specimen2.boundaries, specimen2.accuracy,
+                                               specimen2.fitness_function)
+
+            return child1, child2
+
+        return specimen1, specimen2
+
+    def linkage_evolution_crossover(self, specimen1, specimen2):
         if random.random() < self.crossover_prob:
-            child = []
-            segments = random.randint(1, 3) #dostosować
+            child1_chromosomes = []
+            child2_chromosomes = []
 
-            for _ in range(segments):
-                parent = chromosome_1 if random.random() < self.swap_prob else chromosome_2
-                segment_start = random.randint(0, len(chromosome_1) - 1)
-                segment_end = random.randint(segment_start + 1, len(chromosome_1))
-                child.append(parent[segment_start:segment_end])
+            for i in range(len(specimen1.specimen)):
+                chromosome_1 = specimen1.specimen[i].chromosome
+                chromosome_2 = specimen2.specimen[i].chromosome
 
-            child = child[:len(chromosome_1)]
-            return np.array(child)
-        return chromosome_1 if random.random() < self.swap_prob else chromosome_2
+                child1_segment_list = []
+                child2_segment_list = []
+
+                segments = random.randint(1, min(3, len(chromosome_1)))
+                split_points = sorted(random.sample(range(1, len(chromosome_1)), segments - 1))
+                split_points = [0] + split_points + [len(chromosome_1)]
+
+                for j in range(len(split_points) - 1):
+                    segment_start = split_points[j]
+                    segment_end = split_points[j + 1]
+
+                    if j % 2 == 0:
+                        child1_segment_list.append(chromosome_1[segment_start:segment_end])
+                        child2_segment_list.append(chromosome_2[segment_start:segment_end])
+                    else:
+                        child1_segment_list.append(chromosome_2[segment_start:segment_end])
+                        child2_segment_list.append(chromosome_1[segment_start:segment_end])
+
+                child1_chromosome = np.concatenate(child1_segment_list)
+                child2_chromosome = np.concatenate(child2_segment_list)
+
+                child1_chromosomes.append(child1_chromosome)
+                child2_chromosomes.append(child2_chromosome)
+
+            child1 = Specimen.from_chromosomes(child1_chromosomes, specimen1.boundaries, specimen1.accuracy,
+                                               specimen1.fitness_function)
+            child2 = Specimen.from_chromosomes(child2_chromosomes, specimen2.boundaries, specimen2.accuracy,
+                                               specimen2.fitness_function)
+
+            return child1, child2
+        return specimen1, specimen2
 
     def cross(self, parent1, parent2, ):
         self.children = []
