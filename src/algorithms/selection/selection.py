@@ -42,12 +42,12 @@ class GeneticSelection:
             return self.tournament_selection(self.population, n, min)
 
 
-# Przykładowe użycie klasy
-def fitness_function(population):
-    return sum(population)
-population_size = 25
-chromosome_length = 3
-population = [[random.randint(0, 9) for _ in range(chromosome_length)] for _ in range(population_size)]
-genetic_algo = GeneticSelection(population, fitness_function, selection_type='best', tournament_size=5, )
-selected_chromosomes = genetic_algo.select(False, n=5)
-print("Selected chromosomes:", selected_chromosomes)
+# # Przykładowe użycie klasy
+# def fitness_function(population):
+#     return sum(population)
+# population_size = 25
+# chromosome_length = 3
+# population = [[random.randint(0, 9) for _ in range(chromosome_length)] for _ in range(population_size)]
+# genetic_algo = GeneticSelection(population, fitness_function, selection_type='best', tournament_size=5, )
+# selected_chromosomes = genetic_algo.select(False, n=5)
+# print("Selected chromosomes:", selected_chromosomes)

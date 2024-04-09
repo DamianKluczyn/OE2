@@ -12,7 +12,7 @@ class Config:
                 return json.load(file)
         except FileNotFoundError:
             print('Config file error')
-            return None
+            return {}
 
     def get_param(self, param_path, default=None):
         keys = param_path.split('.')
@@ -26,7 +26,7 @@ class Config:
 
     def set_param(self, param_path, value):
         keys = param_path.split('.')
-        config = self.config
+        config = self.config or {}
         for key in keys[:-1]:
             config = config.setdefault(key, {})
         config[keys[-1]] = value
