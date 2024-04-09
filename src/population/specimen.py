@@ -15,21 +15,24 @@ class Specimen:
         return self.number_of_chromosomes
 
     def get_specimen(self):
-        return [x.return_chromosome() for x in self.specimen]
+        return self.specimen
+
+    def get_decoded_specimen(self):
+        return [x.decode_binary_chromosome() for x in self.specimen]
 
     def get_fitness(self):
         return self.fitness
 
     def calculate_fitness(self):
         if self.fitness_function == "Bent Cigar":
-            self.fitness = optimization.Optimization.bent_cigar_function(self.get_specimen())
+            self.fitness = optimization.Optimization.bent_cigar_function(self.get_decoded_specimen())
         elif self.fitness_function == "Hypersphere":
-            self.fitness = optimization.Optimization.hypersphere(self.get_specimen())
+            self.fitness = optimization.Optimization.hypersphere(self.get_decoded_specimen())
 
     def __str__(self) -> str:
         result = 'Specimen:\n'
         for chromosome in self.specimen:
-            result += f'\t{chromosome.__str__()}\t{self.fitness}'
-        return f'{result}\n'
+            result += f'\t{chromosome.__str__()}'
+        return f'{result}, \t{self.fitness}\n'
 
 

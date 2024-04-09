@@ -33,5 +33,5 @@ class Config:
         self.save_config()
 
     def save_config(self):
-        with open(self.config_path, 'w') as file:
+        with open('config.json', 'w') as file:
             json.dump(self.config, file, indent=4)
