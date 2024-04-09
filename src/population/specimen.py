@@ -20,9 +20,9 @@ class Specimen:
         return self.fitness
 
     def calculate_fitness(self):
-        if self.fitness_function == "Bent Cigar Function":
+        if self.fitness_function == "Bent Cigar":
             self.fitness = optimization.Optimization.bent_cigar_function(self.get_specimen())
-        elif self.fitness_function == "Hypersphere Function":
+        elif self.fitness_function == "Hypersphere":
             self.fitness = optimization.Optimization.hypersphere(self.get_specimen())
 
         return self.fitness
