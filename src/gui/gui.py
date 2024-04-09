@@ -111,7 +111,7 @@ class GUIClass(Tk):
         ttk.Label(mainframe, text="Mutation method:").grid(column=0, row=13, sticky=W)
         self.mutation_method = StringVar()
         self.mutation_method_combo = ttk.Combobox(mainframe, textvariable=self.mutation_method)
-        self.mutation_method_combo['values'] = ("Boundary", "One Point", "Two Point")
+        self.mutation_method_combo['values'] = ("Boundary Mutation", "One Point Mutation", "Two Point Mutation")
         self.mutation_method_combo.grid(column=1, row=13, sticky="N W", padx=5, pady=5)
 
         self.use_elite_strategy_var = BooleanVar()
@@ -162,9 +162,10 @@ class GUIClass(Tk):
         config.set_param('algorithm_parameters.inversion_probability', self.inversion_prob.get())
         config.set_param('algorithm_parameters.elite_strategy.use_elite_strategy', self.use_elite_strategy_var.get())
         config.set_param('algorithm_parameters.elite_strategy.elite_count', self.elite_strategy.get())
-        config.set_param('algorithm_parameters.crossover_method', self.crossover_method.get())
+        config.set_param('algorithm_parameters.crossover_method', self.crossover_method.get().lower().replace(" ", "_"))
         config.set_param('algorithm_parameters.maximization', self.maximization.get())
         config.set_param('algorithm_parameters.fitness_function', self.function.get())
+        config.set_param('algorithm_parameters.mutation_method', self.mutation_method.get().lower().replace(" ", "_"))
 
         exec_time = main_function()
         # self.info_box = tkinter.messagebox.showinfo(title='Obliczenia ewolucyjne - Projekt 2',

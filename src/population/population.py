@@ -15,6 +15,13 @@ class Population:
     def get_population(self) -> List[Specimen]:
         return self.population
 
+    def set_population(self, population: List[Specimen]):
+        self.population = population
+
+    def fit(self):
+        for specimen in self.population:
+            specimen.calculate_fitness()
+
     def __str__(self) -> str:
         result = 'Population:\n'
         for specimen in self.population:

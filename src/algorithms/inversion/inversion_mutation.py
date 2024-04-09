@@ -1,23 +1,21 @@
 import random
+import numpy as np
 
 
 class InversionMutation:
-    def __init__(self, mutation_rate):
-        self.mutation_rate = mutation_rate
+    def __init__(self, inversion_prob):
+        self.inversion_prob = inversion_prob
 
-    def inversion_mutation(self, specimen1):
-        mutated_specimen = []
+    def inversion_mutation(self, specimen):
+        for i in range(len(specimen.get_specimen())):
+            chromosome = specimen.get_specimen()[i].get_chromosome()
+            mutated_chromosome = chromosome.copy()
 
-        for i in range(len(specimen1.specimen)):
-            chromosome = specimen1.specimen[i].chromosome
-
-            mutated_chromosome1 = chromosome[:]
-
-            if random.random() < self.mutation_rate:
+            if random.random() < self.inversion_prob:
                 start = random.randint(0, len(chromosome) - 1)
                 end = random.randint(start, len(chromosome))
-                mutated_chromosome1[start:end] = reversed(chromosome[start:end])
+                mutated_chromosome[start:end] = list(reversed(chromosome[start:end]))
 
-            mutated_specimen.append(mutated_chromosome1)
+            specimen.get_specimen()[i].set_chromosome(np.array(mutated_chromosome))
 
-        return mutated_specimen
+        return specimen

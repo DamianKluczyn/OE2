@@ -37,7 +37,8 @@ class Crossover:
         child2 = Specimen.from_chromosomes(child2_chromosomes, specimen2.boundaries, specimen2.accuracy,
                                            specimen2.fitness_function)
 
-        return child1, child2
+        self.children.append(child1)
+        self.children.append(child2)
 
     def two_point_crossover(self, specimen1, specimen2):
         child1_chromosomes = []
@@ -72,7 +73,8 @@ class Crossover:
         child2 = Specimen.from_chromosomes(child2_chromosomes, specimen2.boundaries, specimen2.accuracy,
                                            specimen2.fitness_function)
 
-        return child1, child2
+        self.children.append(child1)
+        self.children.append(child2)
 
     def three_point_crossover(self, specimen1, specimen2):
         child1_chromosomes = []
@@ -106,7 +108,8 @@ class Crossover:
         child2 = Specimen.from_chromosomes(child2_chromosomes, specimen2.boundaries, specimen2.accuracy,
                                            specimen2.fitness_function)
 
-        return child1, child2
+        self.children.append(child1)
+        self.children.append(child2)
 
     def uniform_crossover(self, specimen1, specimen2):
         child1_chromosomes = []
@@ -139,7 +142,8 @@ class Crossover:
         child2 = Specimen.from_chromosomes(child2_chromosomes, specimen2.boundaries, specimen2.accuracy,
                                            specimen2.fitness_function)
 
-        return child1, child2
+        self.children.append(child1)
+        self.children.append(child2)
 
     def discrete_crossover(self, specimen1, specimen2):
         child1_chromosomes = []
@@ -180,19 +184,27 @@ class Crossover:
         child2 = Specimen.from_chromosomes(child2_chromosomes, specimen2.boundaries, specimen2.accuracy,
                                            specimen2.fitness_function)
 
-        return child1, child2
+        self.children.append(child1)
+        self.children.append(child2)
 
     def elite_crossover(self, specimen1, specimen2):
         if random.random() < self.crossover_prob:
-            child1, child2 = self.single_point_crossover(specimen1, specimen2)
+            self.single_point_crossover(specimen1, specimen2)
+            child1, child2 = self.children[0], self.children[1]
             ratings = [specimen.fitness for specimen in [specimen1, specimen2, child1, child2]]
             elite_index = np.argsort(ratings)[-2:]
             new_population = [specimen1, specimen2, child1, child2][elite_index[0]], [specimen1, specimen2, child1, child2][elite_index[1]]
-            return new_population
-        return specimen1, specimen2
+            self.children = []
+            self.children.append(new_population[0])
+            self.children.append(new_population[1])
+        self.children.append(specimen1)
+        self.children.append(specimen2)
 
     def self_crossover(self, specimen1, specimen2):
-        if random.random() < self.crossover_prob:
+        if random.random() >= self.crossover_prob:
+            self.children.append(specimen1)
+            self.children.append(specimen2)
+        else:
             child1_chromosomes = []
             child2_chromosomes = []
 
@@ -219,12 +231,14 @@ class Crossover:
             child2 = Specimen.from_chromosomes(child2_chromosomes, specimen2.boundaries, specimen2.accuracy,
                                                specimen2.fitness_function)
 
-            return child1, child2
-
-        return specimen1, specimen2
+            self.children.append(child1)
+            self.children.append(child2)
 
     def binary_crossover(self, specimen1, specimen2):
-        if random.random() < self.crossover_prob:
+        if random.random() >= self.crossover_prob:
+            self.children.append(specimen1)
+            self.children.append(specimen2)
+        else:
             child1_chromosomes = []
             child2_chromosomes = []
 
@@ -259,12 +273,14 @@ class Crossover:
             child2 = Specimen.from_chromosomes(child2_chromosomes, specimen2.boundaries, specimen2.accuracy,
                                                specimen2.fitness_function)
 
-            return child1, child2
-
-        return specimen1, specimen2
+            self.children.append(child1)
+            self.children.append(child2)
 
     def linkage_evolution_crossover(self, specimen1, specimen2):
-        if random.random() < self.crossover_prob:
+        if random.random() >= self.crossover_prob:
+            self.children.append(specimen1)
+            self.children.append(specimen2)
+        else:
             child1_chromosomes = []
             child2_chromosomes = []
 
@@ -301,11 +317,12 @@ class Crossover:
             child2 = Specimen.from_chromosomes(child2_chromosomes, specimen2.boundaries, specimen2.accuracy,
                                                specimen2.fitness_function)
 
-            return child1, child2
-        return specimen1, specimen2
+            self.children.append(child1)
+            self.children.append(child2)
 
-    def cross(self, parent1, parent2, ):
+    def cross(self, parent1, parent2):
         self.children = []
+
         if self.cross_method == 'single_point_crossover':
             self.single_point_crossover(parent1, parent2)
         elif self.cross_method == 'two_point_crossover':
