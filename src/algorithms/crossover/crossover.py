@@ -153,11 +153,17 @@ class Crossover:
                 child1_chromosome = np.copy(parent1_chromosome)
                 child2_chromosome = np.copy(parent2_chromosome)
 
-            for i in range(len(chromosome_1)):
-                if random.uniform(0, 1) < self.swap_prob:
-                    child_1[i] = chromosome_1[i]
-                else:
-                    child_1[i] = chromosome_2[i]
+                for i in range(len(parent1_chromosome)):
+                    if random.uniform(0, 1) < self.swap_prob:
+                        child1_chromosome[i] = parent1_chromosome[i]
+                    else:
+                        child1_chromosome[i] = parent2_chromosome[i]
+
+                for i in range(len(parent2_chromosome)):
+                    if random.uniform(0, 1) < self.swap_prob:
+                        child2_chromosome[i] = parent2_chromosome[i]
+                    else:
+                        child2_chromosome[i] = parent1_chromosome[i]
 
                 child1_chromosomes.append(child1_chromosome)
                 child2_chromosomes.append(child2_chromosome)
@@ -187,13 +193,35 @@ class Crossover:
 
     def self_crossover(self, specimen1, specimen2):
         if random.random() < self.crossover_prob:
-            child_1 = np.zeros_like(chromosome_1)
-            ones_counter = chromosome_1.count(1)
-            ones_index = random.sample(range(len(chromosome_1)), ones_counter)
-            for index in ones_index:
-                child_1[index] = 1
-            return child_1
-        return chromosome_1
+            child1_chromosomes = []
+            child2_chromosomes = []
+
+            for i in range(len(specimen1.specimen)):
+                chromosome = specimen1.specimen[i].chromosome
+                child1 = np.zeros_like(chromosome)
+                ones_counter = sum(chromosome)
+                ones_index = random.sample(range(len(chromosome)), ones_counter)
+                for index in ones_index:
+                    child1[index] = 1
+                child1_chromosomes.append(child1)
+
+            for i in range(len(specimen2.specimen)):
+                chromosome = specimen2.specimen[i].chromosome
+                child2 = np.zeros_like(chromosome)
+                ones_counter = sum(chromosome)
+                ones_index = random.sample(range(len(chromosome)), ones_counter)
+                for index in ones_index:
+                    child2[index] = 1
+                child2_chromosomes.append(child2)
+
+            child1 = Specimen.from_chromosomes(child1_chromosomes, specimen1.boundaries, specimen1.accuracy,
+                                               specimen1.fitness_function)
+            child2 = Specimen.from_chromosomes(child2_chromosomes, specimen2.boundaries, specimen2.accuracy,
+                                               specimen2.fitness_function)
+
+            return child1, child2
+
+        return specimen1, specimen2
 
     def binary_crossover(self, specimen1, specimen2):
         if random.random() < self.crossover_prob:
