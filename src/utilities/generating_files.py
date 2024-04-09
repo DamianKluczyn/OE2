@@ -1,26 +1,27 @@
 import matplotlib.pyplot as plt
-
+import os
 class DataSaver:
     def __init__(self):
         pass
 
-    def plot_and_save(self, data, title, filename):
-        generations = list(range(1, len(data) + 1))
-        plt.plot(generations, data)
-        plt.xlabel("Generation number")
-        plt.ylabel("Best")
-        plt.title(title)
+    def plot_and_save(self, data, filename):
+        epochs, fitness_values = zip(*data)
+        plt.plot(epochs, fitness_values, marker='o', linestyle='-', color='blue')
+        plt.title('Wykres wartości funkcji celu w kolejnych epokach')
+        plt.xlabel('Epoka')
+        plt.ylabel('Wartość funkcji celu')
+        parent_directory = os.path.abspath(os.path.join(os.path.dirname(__file__), '../..'))
+        target_directory = os.path.join(parent_directory, 'data', 'output')
+        file_path = os.path.join(target_directory, filename)
+        plt.savefig(file_path)
         plt.grid(True)
-        plt.savefig(filename)
         plt.show()
 
     def save_to_file(self, data, filename):
-        with open(filename, 'w') as file:
+        parent_directory = os.path.abspath(os.path.join(os.path.dirname(__file__), '../..'))
+        target_directory = os.path.join(parent_directory, 'data', 'output')
+        file_path = os.path.join(target_directory, filename)
+        with open(file_path, 'w') as file:
             for i, item in enumerate(data, 1):
                 file.write(f"{i}: {item}\n")
 
-# Przykładowe użycie klasy
-# data = [10, 8, 6, 4, 2, 1, 3, 5, 7, 9]
-# plotter = DataPlotter()
-# plotter.plot_and_save(data, title="Best Chromosome Evolution", filename="best_chromosome_evolution.png")
-# plotter.save_to_file(data, filename="best_chromosome_evolution.txt")

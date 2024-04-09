@@ -1,11 +1,15 @@
+import tkinter
 from tkinter import *
-from tkinter import ttk
+from tkinter import ttk,messagebox
 import re
+
+import numpy as np
+
+from main import main_function
 from src.configuration.config import Config
 from IPython.terminal.pt_inputhooks import tk
 
 
-#import config
 #import main_function
 
 
@@ -97,20 +101,20 @@ class GUIClass(Tk):
         ttk.Label(mainframe, text="Selection method:").grid(column=0, row=11, sticky=W)
         self.selection_method = StringVar()
         self.selection_method_combo = ttk.Combobox(mainframe, textvariable=self.selection_method)
-        self.selection_method_combo['values'] = ("Roulette Wheel", "Tournament", "Select best")
+        self.selection_method_combo['values'] = ("Roulette Wheel", "Tournament", "Best")
         self.selection_method_combo.grid(column=1, row=11, sticky="N W", padx=5, pady=5)
 
         ttk.Label(mainframe, text="Crossover method:").grid(column=0, row=12, sticky=W)
         self.crossover_method = StringVar()
         self.crossover_prob_combo = ttk.Combobox(mainframe, textvariable=self.crossover_method)
-        self.crossover_prob_combo['values'] = ("Single Point", "Two Point", "Three Point", "Uniform", "Discrete",
-                                               "Self", "Binary", "Linkage Evolution")
+        self.crossover_prob_combo['values'] = ("Single Point Crossover", "Two Point Crossover", "Three Point Crossover", "Uniform Crossover", "Discrete Crossover",
+                                               "Self Crossover", "Binary Crossover", "Linkage Evolution Crossover", "Elite Crossover")
         self.crossover_prob_combo.grid(column=1, row=12, sticky="N W", padx=5, pady=5)
 
         ttk.Label(mainframe, text="Mutation method:").grid(column=0, row=13, sticky=W)
         self.mutation_method = StringVar()
         self.mutation_method_combo = ttk.Combobox(mainframe, textvariable=self.mutation_method)
-        self.mutation_method_combo['values'] = ("Boundary", "One Point", "Two Point")
+        self.mutation_method_combo['values'] = ("Boundary Mutation", "One Point Mutation", "Two Point Mutation")
         self.mutation_method_combo.grid(column=1, row=13, sticky="N W", padx=5, pady=5)
 
         self.use_elite_strategy_var = BooleanVar()
@@ -134,7 +138,7 @@ class GUIClass(Tk):
         self.error_message.grid(row=18, padx=5, pady=5, sticky="N E S W")
 
     def validate_entry_data(self, value):
-        pattern = r'[+]?([0-9]*[.])?[0-9]+'
+        pattern = r'[+-]?([0-9]*[.])?[0-9]+'
         if re.fullmatch(pattern, value) is None:
             return False
 
@@ -147,7 +151,6 @@ class GUIClass(Tk):
         self.error_message['text'] = error
 
     def get_values(self):
-        pass
         config = Config()
         config.set_param('algorithm_parameters.start_range_a', self.begin_range_a.get())
         config.set_param('algorithm_parameters.end_range_b', self.end_range_b.get())
@@ -162,15 +165,17 @@ class GUIClass(Tk):
         config.set_param('algorithm_parameters.inversion_probability', self.inversion_prob.get())
         config.set_param('algorithm_parameters.elite_strategy.use_elite_strategy', self.use_elite_strategy_var.get())
         config.set_param('algorithm_parameters.elite_strategy.elite_count', self.elite_strategy.get())
-        config.set_param('algorithm_parameters.crossover_method', self.crossover_method.get())
+        config.set_param('algorithm_parameters.crossover_method', self.crossover_method.get().lower().replace(" ", "_"))
         config.set_param('algorithm_parameters.maximization', self.maximization.get())
         config.set_param('algorithm_parameters.fitness_function', self.function.get())
+        config.set_param('algorithm_parameters.mutation_method', self.mutation_method.get().lower().replace(" ", "_"))
 
-        exec_time = main_function()
-        # self.info_box = tkinter.messagebox.showinfo(title='Obliczenia ewolucyjne - Projekt 2',
-        #                                             message=f'Execution time: {round(exec_time, 4)}s')
+        exec_time, x, fitness = main_function()
+        x = np.round(x, 2)
+        self.info_box = tkinter.messagebox.showinfo(title='Obliczenia ewolucyjne - Projekt 2',
+                                                    message=f'Execution time: {round(exec_time, 4)}s\nF({x}) = {fitness}')
 
 
-#if __name__ == "__main__":
-     #app = GUIClass()
-     #app.mainloop()
+if __name__ == "__main__":
+     app = GUIClass()
+     app.mainloop()

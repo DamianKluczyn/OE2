@@ -10,17 +10,20 @@ class Chromosome:
         self.chromosome_length = ceil(log2((boundaries[1] - boundaries[0]) * 10 ** accuracy))
         self.chromosome = np.random.choice([0, 1], size=self.chromosome_length, p=[0.5, 0.5])
 
-    def return_boundaries(self) -> Tuple[float, float]:
+    def get_boundaries(self) -> Tuple[float, float]:
         return self.boundaries
 
-    def return_accuracy(self) -> int:
+    def get_accuracy(self) -> int:
         return self.accuracy
 
-    def return_chromosome_length(self) -> int:
+    def get_chromosome_length(self) -> int:
         return self.chromosome_length
 
-    def return_chromosome(self) -> np.ndarray:
+    def get_chromosome(self) -> np.ndarray:
         return self.chromosome
+
+    def set_chromosome(self, chromosome):
+        self.chromosome = chromosome
 
     def decode_binary_chromosome(self) -> float:
         decimal = sum(value * (2 ** index) for index, value in enumerate(reversed(self.chromosome)))
