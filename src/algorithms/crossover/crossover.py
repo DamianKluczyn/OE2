@@ -1,14 +1,12 @@
 import numpy as np
 import random
 
+#TODO przyjmuje 2 losowych osobnikow i krzyżuje ich chromosomy typu 0:0, 1:1
 
 class Crossover:
     def __init__(self, crossover_prob=0.9, swap_prob=0.5):
         self.crossover_prob = crossover_prob
         self.swap_prob = swap_prob
-
-    def fitness_function(self):
-        pass
 
     def single_point_crossover(self, chromosome_1, chromosome_2):
         if random.random() < self.crossover_prob:

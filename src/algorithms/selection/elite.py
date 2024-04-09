@@ -1,0 +1,1 @@
+# selekcja x osobnikow na podstawie fitness function
