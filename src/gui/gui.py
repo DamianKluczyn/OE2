@@ -104,8 +104,8 @@ class GUIClass(Tk):
         ttk.Label(mainframe, text="Crossover method:").grid(column=0, row=12, sticky=W)
         self.crossover_method = StringVar()
         self.crossover_prob_combo = ttk.Combobox(mainframe, textvariable=self.crossover_method)
-        self.crossover_prob_combo['values'] = ("Single Point", "Two Point", "Three Point", "Uniform", "Discrete",
-                                               "Self", "Binary", "Linkage Evolution")
+        self.crossover_prob_combo['values'] = ("Single Point Crossover", "Two Point Crossover", "Three Point Crossover", "Uniform Crossover", "Discrete Crossover",
+                                               "Self Crossover", "Binary Crossover", "Linkage Evolution Crossover", "Elite Crossover")
         self.crossover_prob_combo.grid(column=1, row=12, sticky="N W", padx=5, pady=5)
 
         ttk.Label(mainframe, text="Mutation method:").grid(column=0, row=13, sticky=W)

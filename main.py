@@ -1,3 +1,6 @@
+import random
+
+from algorithms.crossover.crossover import Crossover
 from src.algorithms.selection.selection import GeneticSelection
 from src.configuration.config import Config
 from src.population.population import Population
@@ -22,28 +25,38 @@ def main_function():
     maximum = config.get_param('algorithm_parameters.maximization')
     use_elite = config.get_param('algorithm_parameters.elite_strategy.use_elite_strategy')
     elite_count = config.get_param('algorithm_parameters.elite_strategy.elite_count')
+    crossover_prob = config.get_param('algorithm_parameters.crossover_probability')
+    crossover_method = config.get_param('algorithm_parameters.crossover_method')
 
 
     population = Population(population_size, number_of_variables, (start_range, end_range), binary_precision, fitness_function)
-
     start_time = time.time()
 
     for epoch in range(number_of_epochs):
 
-        selection = GeneticSelection(population.get_population(), selection_type=selection_method, tournament_size=selection_count, max=maximum)
+        selection = GeneticSelection(population=population.get_population(), selection_type=selection_method, tournament_size=selection_count, max=maximum)
         selected_population = selection.get_best_chromosomes()
 
         if use_elite:
-            elites = Elite(selected_population, elite_count, maximum)
+            elites = Elite(population=selected_population, elite_count=elite_count, max=maximum)
 
             for elite in elites.select_elite():
                 selected_population.remove(elite)
 
+        print(f'selected: {selected_population}')
 
-        # for i in range(len(population))/2
-        #
-        # crossover = Crossover(...) # przyjmuje 2 osobniki return dwa osobniki nowe //losowe osobniki
-        # new population # nadpisywanie starej populacji skrzyżowanymi len(new) = 18
+        crossover = Crossover(crossover_prob=crossover_prob, cross_method=crossover_method)
+        crossed_population = selected_population.copy()
+        while len(crossed_population) < population_size - elite_count:
+            parent1, parent2 = random.sample(selected_population, 2)
+            child1, child2 = crossover.cross(parent1, parent2)
+            crossed_population.append(child1)
+            crossed_population.append(child2)
+
+
+
+
+
 
         # for i in range(new population)
         # mutation = Mutation(...) # przyjmuje osobnika zwraca osobnika

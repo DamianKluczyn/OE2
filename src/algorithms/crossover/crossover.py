@@ -1,24 +1,43 @@
 import numpy as np
 import random
+from src.population.specimen import Specimen
 
-#TODO przyjmuje 2 losowych osobnikow i krzyżuje ich chromosomy typu 0:0, 1:1
 
 class Crossover:
-    def __init__(self, crossover_prob=0.9, swap_prob=0.5):
+    def __init__(self, crossover_prob=0.9, cross_method='single_point_crossover', swap_prob=0.5):
         self.crossover_prob = crossover_prob
+        self.cross_method = cross_method
         self.swap_prob = swap_prob
+        self.children = []
 
-    def single_point_crossover(self, chromosome_1, chromosome_2):
-        if random.random() < self.crossover_prob:
-            point = random.randint(1, len(chromosome_1) - 2)
-            child_1 = np.concatenate((
-                chromosome_1[:point],
-                chromosome_2[point:]))
-            child_2 = np.concatenate((
-                chromosome_2[:point],
-                chromosome_1[point:]))
-            return child_1, child_2
-        return chromosome_1, chromosome_2
+    def single_point_crossover(self, specimen1, specimen2):
+        child1_chromosomes = []
+        child2_chromosomes = []
+
+        for i in range(len(specimen1.specimen)):
+            parent1_chromosome = specimen1.specimen[i].chromosome
+            parent2_chromosome = specimen2.specimen[i].chromosome
+
+            if random.random() < self.crossover_prob:
+                crossover_point = random.randint(1, len(parent1_chromosome) - 2)
+
+                child1_chromosome = np.concatenate(
+                    (parent1_chromosome[:crossover_point], parent2_chromosome[crossover_point:]))
+                child2_chromosome = np.concatenate(
+                    (parent2_chromosome[:crossover_point], parent1_chromosome[crossover_point:]))
+            else:
+                child1_chromosome = parent1_chromosome
+                child2_chromosome = parent2_chromosome
+
+            child1_chromosomes.append(child1_chromosome)
+            child2_chromosomes.append(child2_chromosome)
+
+        child1 = Specimen.from_chromosomes(child1_chromosomes, specimen1.boundaries, specimen1.accuracy,
+                                           specimen1.fitness_function)
+        child2 = Specimen.from_chromosomes(child2_chromosomes, specimen2.boundaries, specimen2.accuracy,
+                                           specimen2.fitness_function)
+
+        return child1, child2
 
     def two_point_crossover(self, chromosome_1, chromosome_2):
         if random.random() < self.crossover_prob:
@@ -144,3 +163,28 @@ class Crossover:
             child = child[:len(chromosome_1)]
             return np.array(child)
         return chromosome_1 if random.random() < self.swap_prob else chromosome_2
+
+    def cross(self, parent1, parent2, ):
+        self.children = []
+        if self.cross_method == 'single_point_crossover':
+            self.single_point_crossover(parent1, parent2)
+        elif self.cross_method == 'two_point_crossover':
+            self.two_point_crossover(parent1, parent2)
+        elif self.cross_method == 'three_point_crossover':
+            self.three_point_crossover(parent1, parent2)
+        elif self.cross_method == 'uniform_crossover':
+            self.uniform_crossover(parent1, parent2)
+        elif self.cross_method == 'discrete_crossover':
+            self.discrete_crossover(parent1, parent2)
+        elif self.cross_method == 'self_crossover':
+            self.self_crossover(parent1, parent2)
+        elif self.cross_method == 'binary_crossover':
+            self.binary_crossover(parent1, parent2)
+        elif self.cross_method == 'linkage_evolution_crossover':
+            self.linkage_evolution_crossover(parent1, parent2)
+        elif self.cross_method == 'elite_crossover':
+            self.elite_crossover(parent1, parent2)
+
+        return self.children
+
+
