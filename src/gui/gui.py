@@ -1,6 +1,9 @@
+import tkinter
 from tkinter import *
-from tkinter import ttk
+from tkinter import ttk,messagebox
 import re
+
+import numpy as np
 
 from main import main_function
 from src.configuration.config import Config
@@ -135,7 +138,7 @@ class GUIClass(Tk):
         self.error_message.grid(row=18, padx=5, pady=5, sticky="N E S W")
 
     def validate_entry_data(self, value):
-        pattern = r'[+]?([0-9]*[.])?[0-9]+'
+        pattern = r'[+-]?([0-9]*[.])?[0-9]+'
         if re.fullmatch(pattern, value) is None:
             return False
 
@@ -167,9 +170,10 @@ class GUIClass(Tk):
         config.set_param('algorithm_parameters.fitness_function', self.function.get())
         config.set_param('algorithm_parameters.mutation_method', self.mutation_method.get().lower().replace(" ", "_"))
 
-        exec_time = main_function()
-        # self.info_box = tkinter.messagebox.showinfo(title='Obliczenia ewolucyjne - Projekt 2',
-        #                                             message=f'Execution time: {round(exec_time, 4)}s')
+        exec_time, x, fitness = main_function()
+        x = np.round(x, 2)
+        self.info_box = tkinter.messagebox.showinfo(title='Obliczenia ewolucyjne - Projekt 2',
+                                                    message=f'Execution time: {round(exec_time, 4)}s\nF({x}) = {fitness}')
 
 
 if __name__ == "__main__":

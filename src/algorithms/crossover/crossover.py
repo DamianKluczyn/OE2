@@ -197,8 +197,9 @@ class Crossover:
             self.children = []
             self.children.append(new_population[0])
             self.children.append(new_population[1])
-        self.children.append(specimen1)
-        self.children.append(specimen2)
+        else:
+            self.children.append(specimen1)
+            self.children.append(specimen2)
 
     def self_crossover(self, specimen1, specimen2):
         if random.random() >= self.crossover_prob:
