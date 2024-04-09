@@ -1,6 +1,9 @@
 from tkinter import *
 from tkinter import ttk
 import re
+from src.configuration.config import Config
+from IPython.terminal.pt_inputhooks import tk
+
 
 #import config
 #import main_function

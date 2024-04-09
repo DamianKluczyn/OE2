@@ -4,9 +4,9 @@ from .specimen import Specimen
 
 class Population:
     def __init__(self, population_size: int, number_of_chromosomes_per_specimen: int,
-                 boundaries: Tuple[float, float], accuracy: int):
+                 boundaries: Tuple[float, float], accuracy: int, fitness_function: str):
         self.population_size = population_size
-        self.population = [Specimen(number_of_chromosomes_per_specimen, boundaries, accuracy)
+        self.population = [Specimen(number_of_chromosomes_per_specimen, boundaries, accuracy, fitness_function)
                            for _ in range(population_size)]
 
     def get_population_size(self) -> int:
