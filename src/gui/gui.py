@@ -1,11 +1,13 @@
-import tkinter.messagebox
 from tkinter import *
 from tkinter import ttk
 import re
-from configuration.config import Config
+from src.configuration.config import Config
 from IPython.terminal.pt_inputhooks import tk
 
-from main import main_function
+
+#import config
+#import main_function
+
 
 
 class GUIClass(Tk):
@@ -119,11 +121,17 @@ class GUIClass(Tk):
         self.maximization_check = ttk.Checkbutton(mainframe, text="Maximization", variable=self.maximization)
         self.maximization_check.grid(column=0, row=15, sticky=W, padx=5, pady=5)
 
+        ttk.Label(mainframe, text="Fitness function:").grid(column=0, row=16, sticky=W)
+        self.function = StringVar()
+        self.function_combo = ttk.Combobox(mainframe, textvariable=self.function)
+        self.function_combo['values'] = ("Bent Cigar", "Hypersphere")
+        self.function_combo.grid(column=1, row=16, sticky="N W", padx=5, pady=5)
+
         self.start_button = ttk.Button(mainframe, text="Start", padding="10 10 10 10", command=self.get_values)
-        self.start_button.grid(row=16, padx=5, pady=5, sticky="N E S W")
+        self.start_button.grid(row=17, padx=5, pady=5, sticky="N E S W")
 
         self.error_message = ttk.Label(mainframe, foreground="red")
-        self.error_message.grid(row=17, padx=5, pady=5, sticky="N E S W")
+        self.error_message.grid(row=18, padx=5, pady=5, sticky="N E S W")
 
     def validate_entry_data(self, value):
         pattern = r'[+]?([0-9]*[.])?[0-9]+'
@@ -139,6 +147,7 @@ class GUIClass(Tk):
         self.error_message['text'] = error
 
     def get_values(self):
+        pass
         config = Config()
         config.set_param('algorithm_parameters.start_range_a', self.begin_range_a.get())
         config.set_param('algorithm_parameters.end_range_b', self.end_range_b.get())
@@ -155,12 +164,13 @@ class GUIClass(Tk):
         config.set_param('algorithm_parameters.elite_strategy.elite_count', self.elite_strategy.get())
         config.set_param('algorithm_parameters.crossover_method', self.crossover_method.get())
         config.set_param('algorithm_parameters.maximization', self.maximization.get())
+        config.set_param('algorithm_parameters.fitness_function', self.function.get())
 
         exec_time = main_function()
         # self.info_box = tkinter.messagebox.showinfo(title='Obliczenia ewolucyjne - Projekt 2',
         #                                             message=f'Execution time: {round(exec_time, 4)}s')
 
 
-# if __name__ == "__main__":
-#     app = GUIClass()
-#     app.mainloop()
+#if __name__ == "__main__":
+     #app = GUIClass()
+     #app.mainloop()
